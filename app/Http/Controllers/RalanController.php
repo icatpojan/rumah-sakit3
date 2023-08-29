@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Poliklinik;
 use Illuminate\Http\Request;
 use App\Regristasi;
+use Carbon\Carbon;
 
 class RalanController extends Controller
 {
@@ -32,24 +34,27 @@ class RalanController extends Controller
     public function create(Request $request)
     {
         $this->validate($request, [
-            'no_regristasi' => 'nullable|string|max:8',
             'pasien_id' => 'required|integer',
             'tgl_registrasi' => 'nullable|date',
             'jam_reg' => 'nullable|date_format:H:i:s',
             'dokter_id' => 'required|integer',
-            'no_rekam_medis' => 'nullable|string|max:15',
             'poliklinik_id' => 'required|integer',
             'penjamin' => 'required|string|max:100',
             'alamat_pj' => 'nullable|string|max:200',
             'hubungan_pj' => 'nullable|string|max:20',
-            'biaya_regristasi' => 'nullable|numeric',
-            'status' => 'nullable|in:Belum,Sudah,Batal,Berkas Diterima,Dirujuk,Meninggal,Dirawat,Pulang Paksa',
-            'status_bayar' => 'nullable|in:Sudah Bayar,Belum Bayar',
-            'status_daftar' => 'nullable|in:Lama,Baru',
-            'status_lanjut' => 'nullable|in:Ralan,Ranap',
         ]);
 
         $regristasiData = $request->all();
+        $regristasiData['no_regristasi'] = Carbon::now()->format('Y/m/d') . '/' . Regristasi::latest('regristasi_id')->value('regristasi_id');
+        $Poliklinik = Poliklinik::where('poliklinik_id',$request->poliklinik_id)->first();
+        if (!$regristasi = Regristasi::where('pasien_id',$request->pasien_id)->first()) {
+            $regristasiData['biaya_regristasi'] = $Poliklinik->regristasi_baru;
+            $regristasiData['status_daftar'] = 'baru';
+        }else{
+            $regristasiData['biaya_regristasi'] = $Poliklinik->regristasi_lama;
+            $regristasiData['status_daftar'] = 'lama';
+        }
+
         $regristasi = Regristasi::create($regristasiData);
 
         if ($regristasi) {
@@ -62,24 +67,23 @@ class RalanController extends Controller
     public function update(Request $request, $regristasi_id)
     {
         $this->validate($request, [
-            'no_regristasi' => 'nullable|string|max:8',
-            'pasien_id' => 'required|integer',
+            'pasien_id' => 'nullable|integer',
             'tgl_registrasi' => 'nullable|date',
             'jam_reg' => 'nullable|date_format:H:i:s',
-            'dokter_id' => 'required|integer',
-            'no_rekam_medis' => 'nullable|string|max:15',
-            'poliklinik_id' => 'required|integer',
-            'penjamin' => 'required|string|max:100',
+            'dokter_id' => 'nullable|integer',
+            'poliklinik_id' => 'nullable|integer',
+            'penjamin' => 'nullable|string|max:100',
             'alamat_pj' => 'nullable|string|max:200',
             'hubungan_pj' => 'nullable|string|max:20',
             'biaya_regristasi' => 'nullable|numeric',
-            'status' => 'nullable|in:Belum,Sudah,Batal,Berkas Diterima,Dirujuk,Meninggal,Dirawat,Pulang Paksa',
-            'status_bayar' => 'nullable|in:Sudah Bayar,Belum Bayar',
-            'status_daftar' => 'nullable|in:Lama,Baru',
-            'status_lanjut' => 'nullable|in:Ralan,Ranap',
+            'status' => 'nullable|in:belum,sudah,batal,berkas diterima,dirujuk,meninggal,dirawat,pulang paksa',
+            'status_bayar' => 'nullable|in:sudah,belum',
+            'status_daftar' => 'nullable|in:lama,baru',
+            'status_lanjut' => 'nullable|in:ralan,Ranap',
         ]);
 
         $regristasiData = $request->all();
+
         $regristasi = Regristasi::where('regristasi_id', $regristasi_id)->update($regristasiData);
 
         if ($regristasi) {

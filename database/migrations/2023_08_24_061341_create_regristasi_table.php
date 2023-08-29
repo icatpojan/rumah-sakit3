@@ -20,16 +20,15 @@ class CreateRegristasiTable extends Migration
             $table->string('no_regristasi', 8)->nullable();
             $table->date('tgl_registrasi')->nullable();
             $table->time('jam_reg')->nullable();
-            $table->string('no_rekam_medis', 15)->nullable();
             $table->integer('poliklinik_id');
             $table->string('penjamin', 100);
             $table->string('alamat_pj', 200)->nullable();
             $table->string('hubungan_pj', 20)->nullable();
             $table->double('biaya_regristasi')->nullable();
-            $table->enum('status', ['Belum', 'Sudah', 'Batal', 'Berkas Diterima', 'Dirujuk', 'Meninggal', 'Dirawat', 'Pulang Paksa'])->nullable();
-            $table->enum('status_bayar', ['Sudah Bayar', 'Belum Bayar'])->nullable();
-            $table->enum('status_daftar', ['Lama', 'Baru'])->nullable();
-            $table->enum('status_lanjut', ['Ralan', 'Ranap'])->nullable();
+            $table->enum('status', ['belum', 'sudah', 'batal', 'berkas Diterima', 'dirujuk', 'meninggal', 'dirawat', 'pulang paksa'])->default('belum');
+            $table->enum('status_bayar', ['sudah', 'belum'])->default('belum');
+            $table->enum('status_daftar', ['lama', 'baru'])->default('baru');
+            $table->enum('status_lanjut', ['ralan', 'ranap'])->default('ralan');
             $table->timestamps();
         });
     }
