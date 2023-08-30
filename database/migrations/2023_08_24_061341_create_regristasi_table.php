@@ -17,7 +17,7 @@ class CreateRegristasiTable extends Migration
             $table->id('regristasi_id');
             $table->integer('dokter_id');
             $table->integer('pasien_id');
-            $table->string('no_regristasi', 8)->nullable();
+            $table->string('no_regristasi', 50)->nullable();
             $table->date('tgl_registrasi')->nullable();
             $table->time('jam_reg')->nullable();
             $table->integer('poliklinik_id');

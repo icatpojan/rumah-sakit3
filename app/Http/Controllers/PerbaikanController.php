@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Barang;
+use App\Pegawai;
 use Illuminate\Http\Request;
 use App\Perbaikan;
 
@@ -39,6 +41,9 @@ class PerbaikanController extends Controller
             'pegawai_id' => 'nullable|string',
         ]);
 
+        if (!$barang = Barang::find($request->barang_id)) {
+            return $this->sendResponse('failed', 'id barang tidak ada', null, 400);
+        }
         $perbaikanData = $request->all();
         $perbaikan = Perbaikan::create($perbaikanData);
 
@@ -58,6 +63,9 @@ class PerbaikanController extends Controller
             'pegawai_id' => 'nullable|string',
         ]);
 
+        if (!$pegawai = Pegawai::find($request->pegawai_id) || !$barang = Barang::find($request->barang_id)) {
+            return $this->sendResponse('failed', 'id barang atau pegawai tidak ada', null, 400);
+        }
         $perbaikanData = $request->all();
         $perbaikan = Perbaikan::where('perbaikan_id', $perbaikan_id)->update($perbaikanData);
 

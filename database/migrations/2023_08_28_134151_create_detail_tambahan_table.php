@@ -14,7 +14,7 @@ class CreateDetailTambahanTable extends Migration
     public function up()
     {
         Schema::create('detail_tambahan', function (Blueprint $table) {
-            $table->id('rdetail_tambahan_id');
+            $table->id('detail_tambahan_id');
             $table->integer('regristasi_id');
             $table->string('nama_biaya', 60);
             $table->double('total_biaya');

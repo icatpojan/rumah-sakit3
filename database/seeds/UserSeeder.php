@@ -39,6 +39,11 @@ class UserSeeder extends Seeder
             'role_id' => 1,
             'role_name' => 'admin',
         ]);
+        DB::table('poliklinik')->insert([
+            'regristasi_baru' => 20000,
+            'regristasi_lama' => 10000,
+            'nama_poliklinik' => 'laboratorium',
+        ]);
         DB::table('role')->insert([
             'role_id' => 2,
             'role_name' => 'dokter',
@@ -131,6 +136,24 @@ class UserSeeder extends Seeder
             'propinsipj' => 'Propinsi PJ',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
+        ]);
+        DB::table('perawatan')->insert([
+            'poliklinik_id' => 1,
+            'nama_perawatan' => 'Nama Perawatan 1',
+            'bagian_rs' => 100.00,
+            'bhp' => 50.00,
+            'tarif_perujuk' => 200.00,
+            'tarif_tindakan_dokter' => 300.00,
+            'tarif_tindakan_petugas' => 150.00,
+            'kso' => 50.00,
+            'menejemen' => 25.00,
+            'total_biaya' => 875.00,
+            'kode_pj' => 'XYZ',
+            'status' => '1',
+            'kelas' => 'Rawat Jalan',
+            'kategori' => 'PK',
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
     }
 }

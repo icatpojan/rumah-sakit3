@@ -93,7 +93,7 @@ class DetailController extends Controller
             ]);
             return $this->sendResponse('Success', 'Berhasil tambah detail', $detail, 200);
         } else {
-            return $this->sendResponse('Error', 'Gagal menambahkan data Detail', null, 400);
+            return $this->sendResponse('Error', 'Perawatan id tidak ada.', null, 400);
         }
     }
 
@@ -124,7 +124,7 @@ class DetailController extends Controller
             ]);
             return $this->sendResponse('Success', 'Berhasil mengupdate detail', $detail, 200);
         } else {
-            return $this->sendResponse('Error', 'Gagal mengupdate data Detail', null, 400);
+            return $this->sendResponse('Error', 'Gagal mengupdate data Detail. perawatan id tidak ada', null, 400);
         }
     }
 
@@ -150,7 +150,7 @@ class DetailController extends Controller
             ]);
             return $this->sendResponse('Success', 'Berhasil tambah detail obat', $detail, 200);
         } else {
-            return $this->sendResponse('Error', 'Gagal menambahkan data Detail obat', null, 400);
+            return $this->sendResponse('Error', 'Gagal menambahkan data Detail obat. obat id tidak ada', null, 400);
         }
     }
 
@@ -175,7 +175,7 @@ class DetailController extends Controller
             ]);
             return $this->sendResponse('Success', 'Berhasil update detail obat', $detail, 200);
         } else {
-            return $this->sendResponse('Error', 'Gagal update data Detail obat', null, 400);
+            return $this->sendResponse('Error', 'Gagal update data Detail obat. obat id tidak ada', null, 400);
         }
     }
 
@@ -195,7 +195,7 @@ class DetailController extends Controller
     public function updateDetailTambahan(Request $request, $detailTambahan_id)
     {
         $detailTambahanData = $request->all();
-        $detailTambahan = DetailTambahan::where('detailTambahan_id', $detailTambahan_id)->update($detailTambahanData);
+        $detailTambahan = DetailTambahan::where('detail_tambahan_id', $detailTambahan_id)->update($detailTambahanData);
 
         if ($detailTambahan) {
             return $this->sendResponse('Success', 'Berhasil update detailTambahan', $detailTambahan, 200);

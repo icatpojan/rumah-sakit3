@@ -42,6 +42,7 @@ Route::middleware('auth:api')->group(function () {
     // route role
     // ->middleware('permission:menambah-user')
     Route::get('role', 'RoleController@index');
+    Route::get('permission', 'RoleController@indexPermission');
     Route::post('role/{role_id}', 'RoleController@update');
     // route perbaikan
     Route::get('perbaikan', 'PerbaikanController@index');
@@ -74,9 +75,9 @@ Route::middleware('auth:api')->group(function () {
     // route jadwal
     Route::post('presensi', 'PresensiController@index');
     // route regristasi
-    Route::get('ralan', 'RalanController@index');
-    Route::post('ralan', 'RalanController@create');
-    Route::post('ralan/{ralan_id}', 'RalanController@update');
+    Route::get('regristasi', 'RegristasiController@index');
+    Route::post('regristasi', 'RegristasiController@create');
+    Route::post('regristasi/{regristasi_id}', 'RegristasiController@update');
     // route soap
     Route::get('soap', 'SoapController@index');
     Route::post('soap', 'SoapController@create');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Permission;
 use App\PermissionRole;
 use Illuminate\Http\Request;
 use App\Role;
@@ -25,6 +26,18 @@ class RoleController extends Controller
         return $this->sendResponse('Success', 'Daftar Role berhasil diambil', $role, 200);
     }
 
+    // Menampilkan daftar permission
+    public function indexPermission(Request $request)
+    {
+        $query = Permission::query();
+        if ($request->has('permission_id')) {
+            $query->where('permission_id',  $request->input('permission_id'));
+        }
+        $permission = $query->get();
+
+        return $this->sendResponse('Success', 'Daftar Permission berhasil diambil', $permission, 200);
+    }
+
 
     public function update(Request $request, $role_id)
     {
@@ -35,13 +48,12 @@ class RoleController extends Controller
         // Menghapus permission_role yang sudah ada untuk role_id ini
         PermissionRole::where('role_id', $role_id)->delete();
 
-        // Menambahkan permission_role baru berdasarkan permission_id yang diberikan
         foreach ($permission_ids as $permission_id) {
             PermissionRole::create([
                 'role_id' => $role_id,
                 'permission_id' => $permission_id,
             ]);
         }
-        return $this->sendResponse('Success', 'Berhasil update role', null, 200);
+        return $this->sendResponse('Success', 'Berhasil update role', 1, 200);
     }
 }

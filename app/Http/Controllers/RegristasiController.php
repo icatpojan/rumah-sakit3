@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Regristasi;
 use Carbon\Carbon;
 
-class RalanController extends Controller
+class RegristasiController extends Controller
 {
     // Menampilkan daftar regristasi
     public function index(Request $request)
@@ -25,7 +25,7 @@ class RalanController extends Controller
         if ($request->has('dokter_id')) {
             $query->where('dokter_id',  $request->input('dokter_id'));
         }
-        $regristasi = $query->get();
+        $regristasi = $query->with('detail','detail_obat','detail_tambahan')->get();
 
         return $this->sendResponse('Success', 'Daftar Regristasi berhasil diambil', $regristasi, 200);
     }
@@ -35,22 +35,24 @@ class RalanController extends Controller
     {
         $this->validate($request, [
             'pasien_id' => 'required|integer',
-            'tgl_registrasi' => 'nullable|date',
-            'jam_reg' => 'nullable|date_format:H:i:s',
             'dokter_id' => 'required|integer',
             'poliklinik_id' => 'required|integer',
             'penjamin' => 'required|string|max:100',
             'alamat_pj' => 'nullable|string|max:200',
             'hubungan_pj' => 'nullable|string|max:20',
         ]);
+        if (!$Poliklinik = Poliklinik::where('poliklinik_id', $request->poliklinik_id)->first()) {
+            return $this->sendResponse('Failed', 'poliklinik id tidak ada', null, 400);
+        }
 
         $regristasiData = $request->all();
+        $regristasiData['tgl_registrasi'] = Carbon::now()->toDateString();
+        $regristasiData['jam_reg'] = Carbon::now()->toTimeString();
         $regristasiData['no_regristasi'] = Carbon::now()->format('Y/m/d') . '/' . Regristasi::latest('regristasi_id')->value('regristasi_id');
-        $Poliklinik = Poliklinik::where('poliklinik_id',$request->poliklinik_id)->first();
-        if (!$regristasi = Regristasi::where('pasien_id',$request->pasien_id)->first()) {
+        if (!$regristasi = Regristasi::where('pasien_id', $request->pasien_id)->first()) {
             $regristasiData['biaya_regristasi'] = $Poliklinik->regristasi_baru;
             $regristasiData['status_daftar'] = 'baru';
-        }else{
+        } else {
             $regristasiData['biaya_regristasi'] = $Poliklinik->regristasi_lama;
             $regristasiData['status_daftar'] = 'lama';
         }
@@ -60,7 +62,7 @@ class RalanController extends Controller
         if ($regristasi) {
             return $this->sendResponse('Success', 'Berhasil tambah regristasi', $regristasi, 200);
         } else {
-            return $this->sendResponse('Error', 'Gagal menambahkan data Regristasi', null, 500);
+            return $this->sendResponse('Failed', 'Gagal menambahkan data Regristasi', null, 400);
         }
     }
 
@@ -89,7 +91,7 @@ class RalanController extends Controller
         if ($regristasi) {
             return $this->sendResponse('Success', 'Berhasil update regristasi', $regristasi, 200);
         } else {
-            return $this->sendResponse('Error', 'Gagal mengupdate data Regristasi', null, 500);
+            return $this->sendResponse('Error', 'Gagal mengupdate data Regristasi', null, 400);
         }
     }
 }
