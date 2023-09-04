@@ -23,7 +23,7 @@ class CreatePegawaiTable extends Migration
             $table->string('tempat_lahir', 20);
             $table->date('tanggal_lahir');
             $table->string('alamat', 60);
-            $table->string('photo', 500)->nullable();
+            $table->string('image', 500)->nullable();
             $table->enum('golongan_darah', ['A', 'B', 'O', 'AB', '-'])->nullable();
             $table->string('agama', 12)->nullable();
             $table->string('no_telp', 13)->nullable();

@@ -14,6 +14,7 @@ class CreatePasienTable extends Migration
             // Informasi Identitas Pasien
             $table->string('nama_pasien', 40);
             $table->string('nik', 20);
+            $table->string('image', 40)->nullable();
             $table->enum('jk', ['L', 'P'])->nullable();
             $table->string('tmp_lahir', 15)->nullable();
             $table->date('tgl_lahir')->nullable();

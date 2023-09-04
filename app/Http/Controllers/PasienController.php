@@ -34,6 +34,12 @@ class PasienController extends Controller
 
         $pasienData = $request->all();
         $pasienData['user_id'] = $user->user_id;
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path() . '/img/', $filename);
+            $pasienData['image'] = env('APP_URL') . $filename;
+        }
         $pasien = Pasien::create($pasienData);
 
         if ($pasien) {
@@ -46,6 +52,12 @@ class PasienController extends Controller
     public function update(PasienRequest $request, $pasien_id)
     {
         $pasienData = $request->all();
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path() . '/img/', $filename);
+            $pasienData['image'] = env('APP_URL') . $filename;
+        }
         $pasien = Pasien::where('pasien_id', $pasien_id)->update($pasienData);
 
         if ($pasien) {

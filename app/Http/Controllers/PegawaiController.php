@@ -27,7 +27,7 @@ class PegawaiController extends Controller
     //tambah pegawai
     public function create(PegawaiRequest $request)
     {
-        if (!$Departemen = Departemen::where('departemen_id',$request->departemen_id)->first()) {
+        if (!$Departemen = Departemen::where('departemen_id', $request->departemen_id)->first()) {
             return $this->sendResponse('Failed', 'departemen id tidak ada. masukan dulu data', null, 400);
         }
         $user = User::create([
@@ -37,6 +37,12 @@ class PegawaiController extends Controller
         ]);
 
         $pegawaiData = $request->all();
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path() . '/img/', $filename);
+            $pegawaiData['image'] = env('APP_URL') . $filename;
+        }
         $pegawaiData['user_id'] = $user->user_id;
         $pegawai = Pegawai::create($pegawaiData);
 
@@ -53,6 +59,12 @@ class PegawaiController extends Controller
             return $this->sendResponse('Failed', 'departemen id tidak ada. masukan dulu data', null, 400);
         }
         $pegawaiData = $request->all();
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path() . '/img/', $filename);
+            $pegawaiData['image'] = env('APP_URL') . $filename;
+        }
         $pegawai = Pegawai::where('pegawai_id', $pegawai_id)->update($pegawaiData);
 
         if ($pegawai) {
