@@ -41,9 +41,7 @@ class PerbaikanController extends Controller
             'status' => 'nullable|in:0,1',
         ]);
 
-        $permohonan = PermohonanPerbaikan::find($request->permohonan_perbaikan_id);
-
-        if (!$permohonan) {
+        if (!$permohonan = PermohonanPerbaikan::find($request->permohonan_perbaikan_id)) {
             return $this->sendResponse('failed', 'id permohonan tidak ada', null, 400);
         }
 
@@ -69,6 +67,10 @@ class PerbaikanController extends Controller
             'status' => 'nullable|in:0,1',
         ]);
 
+        if (!$permohonan = PermohonanPerbaikan::find($request->permohonan_perbaikan_id)) {
+            return $this->sendResponse('failed', 'id permohonan tidak ada', null, 400);
+        }
+        
         $perbaikanData = $request->all();
         $perbaikan = Perbaikan::where('perbaikan_id', $perbaikan_id)->update($perbaikanData);
 
