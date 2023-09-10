@@ -14,14 +14,11 @@ class CreatePermohonanPerbaikanTable extends Migration
     public function up()
     {
         Schema::create('permohonan_perbaikan', function (Blueprint $table) {
-            $table->id('permohonan_id');
-            $table->integer('perbaikan_id');
-            $table->date('tgl_permohonan');
-
+            $table->id('permohonan_perbaikan_id');
+            $table->integer('barang_id');
+            $table->integer('pegawai_id');
+            $table->date('tgl_permohonan')->nullable();
             $table->string('deskripsi_kerusakan')->nullable();
-            $table->string('pelaksana')->nullable();
-            $table->double('biaya')->nullable();
-            $table->enum('status', ['sedang diperbaiki','selesai diperbaiki', 'tidak bisa diperbaiki'])->default('sedang diperbaiki');
             $table->timestamps();
         });
     }

@@ -94,14 +94,6 @@ Route::middleware('auth:api')->group(function () {
     Route::get('detail-tambahan', 'DetailController@indexDetailTambahan');
     Route::post('detail-tambahan', 'DetailController@createDetailTambahan');
     Route::post('detail-tambahan/{detail_tambahan_id}', 'DetailController@updateDetailTambahan');
-    // route inventaris
-    Route::get('inventaris', 'InventarisController@index');
-    Route::post('inventaris', 'InventarisController@create');
-    Route::post('inventaris/{inventaris_id}', 'InventarisController@update');
-    // route pemeliharan
-    Route::get('pemeliharaan', 'PemeliharaanController@index');
-    Route::post('pemeliharaan', 'PemeliharaanController@create');
-    Route::post('pemeliharaan/{pemeliharaan_id}', 'PemeliharaanController@update');
     // route permohonan-perbaikan
     Route::get('permohonan-perbaikan', 'PermohonanPerbaikanController@index');
     Route::post('permohonan-perbaikan', 'PermohonanPerbaikanController@create');

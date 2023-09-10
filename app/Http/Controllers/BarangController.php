@@ -12,12 +12,12 @@ class BarangController extends Controller
     {
         $query = Barang::query();
 
-        if ($request->has('nama_barang')) {
-            $query->where('nama_barang',  $request->input('nama_barang'));
-        }
-
         if ($request->has('barang_id')) {
             $query->where('barang_id',  $request->input('barang_id'));
+        }
+
+        if ($request->has('nama_barang')) {
+            $query->where('nama_barang',  $request->input('nama_barang'));
         }
 
         $barang = $query->get();
@@ -31,7 +31,10 @@ class BarangController extends Controller
         $this->validate($request, [
             'nama_barang' => 'required|string',
             'letak_barang' => 'required|string',
-            'jumlah_barang' => 'required|integer',
+            'harga' => 'nullable|numeric',
+            'jumlah_barang' => 'nullable|integer',
+            'tgl_pengadaan' => 'nullable|date',
+            'status' => 'nullable|in:0,1',
         ]);
 
         $barangData = $request->all();
@@ -43,13 +46,16 @@ class BarangController extends Controller
             return $this->sendResponse('Error', 'Gagal menambahkan data Barang', null, 500);
         }
     }
-
+    //update barang
     public function update(Request $request, $barang_id)
     {
         $this->validate($request, [
             'nama_barang' => 'required|string',
             'letak_barang' => 'required|string',
-            'jumlah_barang' => 'required|integer',
+            'harga' => 'nullable|numeric',
+            'jumlah_barang' => 'nullable|integer',
+            'tgl_pengadaan' => 'nullable|date',
+            'status' => 'nullable|in:0,1',
         ]);
 
         $barangData = $request->all();
