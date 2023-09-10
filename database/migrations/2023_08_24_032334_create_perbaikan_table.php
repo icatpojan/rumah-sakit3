@@ -15,10 +15,13 @@ class CreatePerbaikanTable extends Migration
     {
         Schema::create('perbaikan', function (Blueprint $table) {
             $table->id('perbaikan_id');
-            $table->integer('barang_id');
-            $table->string('letak_barang');
-            $table->string('status')->nullable();
-            $table->string('pegawai_id')->nullable();
+            $table->integer('permohonan_perbaikan_id');
+            $table->string('pelaksana')->nullable();
+            $table->date('tgl_perbaikan')->nullable();
+            $table->string('lama_perbaikan')->nullable();
+            $table->string('uraian_kegiatan')->nullable();
+            $table->double('biaya')->nullable();
+            $table->enum('status', ['0','1'])->nullable();
             $table->timestamps();
         });
     }

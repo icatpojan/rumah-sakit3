@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Barang;
 use App\Pegawai;
+use App\PermohonanPerbaikan;
 use Illuminate\Http\Request;
 use App\Perbaikan;
 
@@ -18,32 +19,32 @@ class PerbaikanController extends Controller
             $query->where('perbaikan_id',  $request->input('perbaikan_id'));
         }
 
-        if ($request->has('letak_barang')) {
-            $query->where('letak_barang',  $request->input('letak_barang'));
-        }
-
-        if ($request->has('pegawai_id')) {
-            $query->where('pegawai_id',  $request->input('pegawai_id'));
+        if ($request->has('permohonan_perbaikan_id')) {
+            $query->where('permohonan_perbaikan_id',  $request->input('permohonan_perbaikan_id'));
         }
 
         $perbaikan = $query->get();
 
-        return $this->sendResponse('Success', 'Daftar Perbaikan berhasil diambil', $perbaikan, 200);
+        return $this->sendResponse('Success', 'Daftar perbaikan berhasil diambil', $perbaikan, 200);
     }
 
     //tambah perbaikan
     public function create(Request $request)
     {
         $this->validate($request, [
-            'barang_id' => 'required|integer',
-            'letak_barang' => 'required|string',
-            'status' => 'nullable|string',
-            'pegawai_id' => 'nullable|string',
+            'permohonan_perbaikan_id' => 'required|integer',
+            'pelaksana' => 'nullable|string',
+            'tgl_perbaikan' => 'nullable|date',
+            'lama_perbaikan' => 'nullable|string',
+            'uraian_kegiatan' => 'nullable|string',
+            'biaya' => 'nullable|numeric',
+            'status' => 'nullable|in:0,1',
         ]);
 
-        if (!$barang = Barang::find($request->barang_id)) {
-            return $this->sendResponse('failed', 'id barang tidak ada', null, 400);
+        if (!$permohonan = PermohonanPerbaikan::find($request->permohonan_perbaikan_id)) {
+            return $this->sendResponse('failed', 'id permohonan tidak ada', null, 400);
         }
+
         $perbaikanData = $request->all();
         $perbaikan = Perbaikan::create($perbaikanData);
 
@@ -57,15 +58,19 @@ class PerbaikanController extends Controller
     public function update(Request $request, $perbaikan_id)
     {
         $this->validate($request, [
-            'barang_id' => 'required|integer',
-            'letak_barang' => 'required|string',
-            'status' => 'nullable|string',
-            'pegawai_id' => 'nullable|string',
+            'permohonan_perbaikan_id' => 'required|integer',
+            'pelaksana' => 'nullable|string',
+            'tgl_perbaikan' => 'nullable|date',
+            'lama_perbaikan' => 'nullable|string',
+            'uraian_kegiatan' => 'nullable|string',
+            'biaya' => 'nullable|numeric',
+            'status' => 'nullable|in:0,1',
         ]);
 
-        if (!$pegawai = Pegawai::find($request->pegawai_id) || !$barang = Barang::find($request->barang_id)) {
-            return $this->sendResponse('failed', 'id barang atau pegawai tidak ada', null, 400);
+        if (!$permohonan = PermohonanPerbaikan::find($request->permohonan_perbaikan_id)) {
+            return $this->sendResponse('failed', 'id permohonan tidak ada', null, 400);
         }
+        
         $perbaikanData = $request->all();
         $perbaikan = Perbaikan::where('perbaikan_id', $perbaikan_id)->update($perbaikanData);
 

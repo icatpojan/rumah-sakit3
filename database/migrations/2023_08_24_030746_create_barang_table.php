@@ -12,7 +12,10 @@ class CreateBarangTable extends Migration
             $table->id('barang_id');
             $table->string('nama_barang');
             $table->string('letak_barang');
-            $table->integer('jumlah_barang');
+            $table->double('harga')->nullable();
+            $table->integer('jumlah_barang')->nullable();
+            $table->date('tgl_pengadaan')->nullable();
+            $table->enum('status', ['0','1'])->nullable();
             $table->timestamps();
         });
     }
